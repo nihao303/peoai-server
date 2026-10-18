@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install requests
+
+      - name: Byte-compile sources
+        run: python -m compileall -q peoai peoai_server.py scripts tests
+
+      - name: Verify console build is up to date
+        run: python scripts/build_ui.py --check
+
+      - name: Check example config matches defaults
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          sys.path.insert(0, ".")
+          from peoai.config import default_config, DEFAULT_MODELS
+          expected = default_config()
+          expected["security"]["operator_password_hash"] = ""
+          expected["security"]["admin_token_hash"] = ""
+          expected["api_keys"] = []
+          expected["models"] = DEFAULT_MODELS
+          actual = json.loads(pathlib.Path("config.example.json").read_text("utf-8"))
+          if actual != expected:
+              print("config.example.json 与 peoai/config.py 默认值不一致")
+              raise SystemExit(1)
+          print("config.example.json 校验通过")
+          PY
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
