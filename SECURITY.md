@@ -8,11 +8,6 @@
 
 ## 报告漏洞
 
-**请不要通过公开 Issue 报告安全问题。**
-
-- 邮件：`hhhhhh1234560@163.com`（建议同时开启 GitHub 仓库的 Private vulnerability reporting，优先走私密报告）
-- 或在 GitHub 仓库的 **Security → Report a vulnerability** 中私密提交（需在 Settings 中开启 Private vulnerability reporting）
-
 请尽量包含：
 
 1. 受影响版本与部署方式；
