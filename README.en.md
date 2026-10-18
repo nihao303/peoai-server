@@ -369,6 +369,10 @@ python -m venv venv
 
 Edit files under `ui/` and rebuild; do not edit `static/peoai.html` directly.
 
+## Maintainers and governance
+
+Current maintainers and their areas are listed in [MAINTAINERS.md](MAINTAINERS.md). Decision making, joining/leaving the team and release cadence are in [GOVERNANCE.md](GOVERNANCE.md). Important changes need two maintainer approvals; routine fixes need one.
+
 ## Contributing
 
 Issues and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Report security issues privately as described in [SECURITY.md](SECURITY.md).

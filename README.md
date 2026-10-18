@@ -360,6 +360,10 @@ python -m venv venv
 
 前端改动请修改 `ui/` 下的片段后重新组装，不要直接编辑 `static/peoai.html`。
 
+## 维护者与治理
+
+当前维护者、负责范围与联系方式见 [MAINTAINERS.md](MAINTAINERS.md)；决策方式、加入/退出流程与发布节奏见 [GOVERNANCE.md](GOVERNANCE.md)。重要改动需要 2 名维护者同意，日常修复 1 名即可合并。
+
 ## 贡献
 
 欢迎 Issue 与 PR。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)；安全问题请按 [SECURITY.md](SECURITY.md) 私下报告。

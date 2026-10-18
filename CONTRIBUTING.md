@@ -73,6 +73,32 @@ test: 覆盖工具调用参数校验
 chore: 升级 flask-cors
 ~~~
 
+## 分支与 PR
+
+- 从最新的 `main` 切分支：`feat/xxx`、`fix/xxx`、`docs/xxx`；
+- 一个 PR 只做一件事，避免顺手重构无关文件；
+- 描述里写清楚：做了什么、为什么、怎么验证、关联 Issue（如 `Closes #12`）；
+- 前端改动附深色/浅色截图；
+- 不要直接向 `main` push，分支保护会拦截。
+
+## 评审与合并
+
+- 至少 **1 名维护者** 审核通过；协议、安全、配置格式、破坏性变更需要 **2 名**（见 [GOVERNANCE.md](GOVERNANCE.md)）；
+- 评审意见解决后再合并，使用 **Squash merge** 保持线性历史；
+- 合并后删除分支；
+- 维护者可以要求拆分过大的 PR，或先开 Issue 对齐设计。
+
+## 发布
+
+- 维护者按 [GOVERNANCE.md](GOVERNANCE.md) 轮值发布；
+- 发布前更新 [CHANGELOG.md](CHANGELOG.md)，确认 CI 与 `scripts/build_ui.py --check` 通过；
+- 打标签 `vX.Y.Z` 并在 GitHub Releases 写说明；
+- 安全修复可以加急，事后补 CHANGELOG。
+
+## 成为维护者
+
+持续提交高质量 PR、参与 review、帮助分类 Issue，就有机会被提名为评审者或维护者。流程见 [GOVERNANCE.md](GOVERNANCE.md#维护者)。
+
 ## PR 检查表
 
 - [ ] 测试通过（`python -m unittest discover -s tests`）

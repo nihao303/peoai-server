@@ -139,6 +139,57 @@ Settings → Branches → Add branch protection rule
   [ ] Require approvals（单人项目可关闭）
 ~~~
 
+## 6.5 邀请协作者（多人维护）
+
+### 权限分配
+
+| 角色 | GitHub 角色 | 适合 |
+| --- | --- | --- |
+| 项目负责人 | Admin | 只有你，负责仓库设置与最终裁决 |
+| 共同维护者 | Maintain | 长期合并 PR、发布、处理安全报告 |
+| 评审者 | Write | 审阅 PR、分类 Issue，不能直接推 `main` |
+
+操作：Settings → Collaborators and teams → Add people。**个人账号（如 nihao303）不能创建 Team**，只能逐个邀请协作者；给共同维护者 **Maintain**、评审者 **Write**。如果以后把仓库迁移到 GitHub Organization，再建 Team `peoai-maintainers`，把成员加进 Team 并授予 Maintain，之后加人只改 Team。
+
+### CODEOWNERS
+
+仓库已带 `.github/CODEOWNERS`。邀请维护者后有两种做法：
+
+1. 个人仓库：逐个列出维护者，例如 `* @nihao303 @another-maintainer`；
+2. 组织仓库：换成 Team，例如 `* @your-org/peoai-maintainers`；
+3. 或按目录追加个人/团队，例如 `/ui/ @frontend-maintainer`。
+
+然后在分支保护里勾选 **Require review from Code Owners**，关键路径就必须由对应 owner 审核。
+
+### 团队版分支保护
+
+~~~text
+Branch name pattern: main
+[x] Require a pull request before merging
+    Required approvals: 1（重要项目可设 2）
+[x] Dismiss stale pull request approvals when new commits are pushed
+[x] Require review from Code Owners（CODEOWNERS 配好后）
+[x] Require status checks to pass before merging
+[x] Require conversation resolution before merging
+[x] Do not allow force pushes
+[x] Do not allow deletions
+[ ] Include administrators（可选）
+~~~
+
+### 标签保护与环境
+
+- Settings → Tags → Add rule：pattern `v*`，限制创建/删除标签为维护者；
+- Settings → Environments → New environment `release`，添加 required reviewers（至少 1 名维护者），以后自动发布 workflow 使用该环境；
+- Settings → Collaborators 里不要把 Admin 给普通维护者。
+
+### 推荐标签
+
+`bug`、`enhancement`、`security`、`docs`、`protocol`、`ui`、`good first issue`、`help wanted`、`dependencies`、`needs-triage`。
+
+### 安全报告
+
+Security → Private vulnerability reporting 开启后，维护者可以在 Advisory 中协作；建议至少两名维护者可见报告。邮件兜底见 `SECURITY.md`。
+
 ## 7. 发布流程
 
 ~~~bash
