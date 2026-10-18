@@ -1,0 +1,13 @@
+# 代码所有者
+# 默认负责人：项目负责人。个人仓库只能写个人；迁到 GitHub Organization 后
+# 可改为团队（例如 @your-org/peoai-maintainers），或按区域追加维护者。
+*                       @nihao303 @xrc111
+
+# 关键路径：修改这些目录需要对应维护者 review
+/peoai/                 @nihao303 @xrc111
+/peoai/protocols/       @nihao303 @xrc111
+/ui/                    @nihao303 @xrc111
+/scripts/               @nihao303 @xrc111
+/.github/               @nihao303 @xrc111
+/docs/                  @nihao303 @xrc111
+/SECURITY.md            @nihao303 @xrc111
