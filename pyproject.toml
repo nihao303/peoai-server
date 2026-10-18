@@ -1,0 +1,13 @@
+# 仅用于代码检查工具配置；运行时不依赖打包。
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+exclude = [".git", "venv", "data", "static"]
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82", "I001"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

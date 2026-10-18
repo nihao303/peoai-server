@@ -1,0 +1,45 @@
+[Unit]
+Description=PeoAI Server - 把真人接入任何 AI API（Human-in-the-loop bridge）
+Documentation=https://github.com/nihao303/peoai-server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 建议使用独立系统用户：
+#   useradd --system --create-home --home-dir /opt/peoai_server --shell /usr/sbin/nologin peoai
+#   chown -R peoai:peoai /opt/peoai_server
+# 若暂时用 root 运行，把下面两行改成 User=root / Group=root 即可。
+User=peoai
+Group=peoai
+WorkingDirectory=/opt/peoai_server
+Environment=PYTHONUNBUFFERED=1
+Environment=PEOAI_HOME=/opt/peoai_server
+Environment=PEOAI_HOST=127.0.0.1
+Environment=PEOAI_PORT=5007
+Environment=PEOAI_THREADS=32
+ExecStart=/opt/peoai_server/venv/bin/python /opt/peoai_server/peoai_server.py
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+KillSignal=SIGINT
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=peoai
+
+# ---- 安全加固 ----
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+UMask=0077
+# 需要直接对外暴露端口时，把上面的 PEOAI_HOST 改成 0.0.0.0，
+# 并在防火墙放行对应端口；生产环境更推荐只监听 127.0.0.1 + Nginx 反代。
+
+[Install]
+WantedBy=multi-user.target

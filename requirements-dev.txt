@@ -1,0 +1,4 @@
+# 开发与测试依赖
+-r requirements.txt
+requests>=2.31
+ruff>=0.5

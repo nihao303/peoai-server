@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "server": {
+    "name": "PeoAI",
+    "tagline": "把真人接入任何 AI API",
+    "host": "0.0.0.0",
+    "port": 5007,
+    "public_base_url": "",
+    "default_model": "peo-human-1",
+    "allow_fallback_model": true,
+    "console_enabled": true
+  },
+  "security": {
+    "operator_password_hash": "",
+    "admin_token_hash": "",
+    "require_api_key": true,
+    "allowed_origins": [
+      "*"
+    ],
+    "operator_origins": [
+      "*"
+    ],
+    "session_ttl_seconds": 43200,
+    "login_max_attempts": 6,
+    "login_lock_seconds": 300,
+    "max_body_bytes": 8388608,
+    "max_messages": 200,
+    "max_message_chars": 120000,
+    "max_images": 4,
+    "max_image_bytes": 2097152,
+    "max_reply_chars": 200000,
+    "trust_proxy_headers": true,
+    "allow_remote_images": false,
+    "hsts": false
+  },
+  "queue": {
+    "max_pending": 100,
+    "request_ttl_seconds": 600,
+    "claim_ttl_seconds": 900,
+    "keepalive_seconds": 15,
+    "history_limit": 300,
+    "max_concurrent_per_key": 3,
+    "persist_media": false,
+    "typing_indicator": true
+  },
+  "operator": {
+    "display_name": "PeoAI 操作员",
+    "show_client_ip": true,
+    "auto_claim": true
+  },
+  "models": [
+    {
+      "id": "peo-human-1",
+      "label": "PeoAI Human 1",
+      "description": "通用旗舰：图片理解、工具调用、流式输出全部开启，由真人操作员作答。",
+      "enabled": true,
+      "aliases": [],
+      "capabilities": {
+        "vision": true,
+        "tools": true,
+        "streaming": true,
+        "reasoning": true,
+        "json_mode": true,
+        "code": true,
+        "audio": false,
+        "embeddings": false
+      },
+      "context_window": 128000,
+      "max_output_tokens": 8192,
+      "default_params": {
+        "temperature": 0.7,
+        "top_p": 1.0,
+        "max_tokens": null,
+        "stop": []
+      },
+      "notes": ""
+    },
+    {
+      "id": "peo-human-fast",
+      "label": "PeoAI Human Fast",
+      "description": "低延迟优先：适合短问答与轻量对话，不支持图片。",
+      "enabled": true,
+      "aliases": [],
+      "capabilities": {
+        "vision": false,
+        "tools": true,
+        "streaming": true,
+        "reasoning": false,
+        "json_mode": true,
+        "code": false,
+        "audio": false,
+        "embeddings": false
+      },
+      "context_window": 32000,
+      "max_output_tokens": 2048,
+      "default_params": {
+        "temperature": 0.4,
+        "top_p": 1.0,
+        "max_tokens": null,
+        "stop": []
+      },
+      "notes": ""
+    },
+    {
+      "id": "peo-human-vision",
+      "label": "PeoAI Human Vision",
+      "description": "多模态专用：专注截图、图表、试卷等图像理解，自动展示原图。",
+      "enabled": true,
+      "aliases": [],
+      "capabilities": {
+        "vision": true,
+        "tools": true,
+        "streaming": true,
+        "reasoning": true,
+        "json_mode": true,
+        "code": false,
+        "audio": false,
+        "embeddings": false
+      },
+      "context_window": 64000,
+      "max_output_tokens": 4096,
+      "default_params": {
+        "temperature": 0.7,
+        "top_p": 1.0,
+        "max_tokens": null,
+        "stop": []
+      },
+      "notes": ""
+    },
+    {
+      "id": "peo-human-code",
+      "label": "PeoAI Human Code",
+      "description": "代码与工具调用：适合 Agent、IDE 插件与需要结构化输出的场景。",
+      "enabled": true,
+      "aliases": [],
+      "capabilities": {
+        "vision": false,
+        "tools": true,
+        "streaming": true,
+        "reasoning": false,
+        "json_mode": true,
+        "code": true,
+        "audio": false,
+        "embeddings": false
+      },
+      "context_window": 64000,
+      "max_output_tokens": 8192,
+      "default_params": {
+        "temperature": 0.2,
+        "top_p": 1.0,
+        "max_tokens": null,
+        "stop": []
+      },
+      "notes": ""
+    },
+    {
+      "id": "peo-human-mini",
+      "label": "PeoAI Human Mini",
+      "description": "轻量档：便宜、够快，用于连通性测试与简单分类任务。",
+      "enabled": true,
+      "aliases": [],
+      "capabilities": {
+        "vision": false,
+        "tools": false,
+        "streaming": true,
+        "reasoning": false,
+        "json_mode": true,
+        "code": false,
+        "audio": false,
+        "embeddings": false
+      },
+      "context_window": 16000,
+      "max_output_tokens": 1024,
+      "default_params": {
+        "temperature": 0.7,
+        "top_p": 1.0,
+        "max_tokens": null,
+        "stop": []
+      },
+      "notes": ""
+    }
+  ],
+  "api_keys": [],
+  "logging": {
+    "level": "INFO",
+    "audit": true,
+    "max_bytes": 5242880,
+    "backups": 3
+  }
+}

@@ -1,0 +1,42 @@
+# ---- 运行时数据（含密钥与用户内容，绝不入库）----
+config.json
+data/
+*.log
+*.log.*
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ---- 编辑器 / 系统 ----
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+
+# ---- 本地部署 ----
+deploy/local/
+*.service.local
+
+# ---- 前端构建 / 本地调试产物 ----
+node_modules/
+.jsdom/
+.npm-cache/
+static/peoai.deploy.html
+*_preview.html
+.peoai-*/
