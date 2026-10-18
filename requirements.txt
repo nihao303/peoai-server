@@ -2,4 +2,4 @@
 flask>=3.0,<4
 flask-cors>=4.0,<7
 # 生产环境 WSGI 服务器（未安装时入口自动回退到 Flask 内置服务器）
-waitress>=3.0,<4
+waitress>=3.0.2,<4
