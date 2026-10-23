@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: 安全漏洞
-    url: https://github.com/YOUR_NAME/peoai-server/security/advisories/new
-    about: 请私下报告，不要开公开 Issue
-  - name: 使用与部署问题
-    url: https://github.com/YOUR_NAME/peoai-server/discussions
-    about: 配置、部署与接入的疑问适合放在 Discussions
