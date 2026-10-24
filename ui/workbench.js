@@ -647,9 +647,26 @@
     return !!security.allow_remote_images;
   }
 
+  function dataUrlToBlobUrl(src) {
+    if (!src || src.indexOf('data:') !== 0) return src;
+    try {
+      var comma = src.indexOf(',');
+      if (comma < 0) return src;
+      var header = src.slice(5, comma);
+      var payload = src.slice(comma + 1);
+      var mime = header.split(';')[0] || 'application/octet-stream';
+      var binary = header.indexOf(';base64') >= 0 ? atob(payload) : decodeURIComponent(payload);
+      var bytes = new Uint8Array(binary.length);
+      for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return URL.createObjectURL(new Blob([bytes], { type: mime }));
+    } catch (e) {
+      return src;
+    }
+  }
+
   function mediaImage(src, media) {
     var img = el('img', {
-      src: src,
+      src: dataUrlToBlobUrl(src),
       alt: media.name || '请求中的图片',
       loading: 'lazy',
       referrerpolicy: 'no-referrer',
@@ -724,7 +741,7 @@
     var img = document.getElementById('lightboxImg');
     var meta = document.getElementById('lightboxMeta');
     if (!overlay || !img) return;
-    img.src = src;
+    img.src = dataUrlToBlobUrl(src);
     img.alt = (media && media.name) || '';
     meta.textContent = [
       media && media.mime ? media.mime : '',

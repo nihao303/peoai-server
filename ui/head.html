@@ -6,7 +6,16 @@
 <meta name="color-scheme" content="light dark">
 <meta name="referrer" content="no-referrer">
 <title>PeoAI 人类操作台</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d84ff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='8.5' r='3.1'/%3E%3Cpath d='M4.8 19.4c.6-3.2 3.2-5.1 6.3-5.1 2 0 3.7.7 4.9 2'/%3E%3Cpath d='M18.6 4.2l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z'/%3E%3C/svg%3E">
+<link id="faviconLink" rel="icon">
+<script>
+(function () {
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0d84ff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8.5" r="3.1"/><path d="M4.8 19.4c.6-3.2 3.2-5.1 6.3-5.1 2 0 3.7.7 4.9 2"/><path d="M18.6 4.2l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>';
+  try {
+    var link = document.getElementById('faviconLink');
+    link.href = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  } catch (e) { /* 某些 CSP 下不允许 blob，忽略即可 */ }
+})();
+</script>
 <style>
 /* ============================================================
    PeoAI Console · Miuix 风格

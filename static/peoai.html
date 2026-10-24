@@ -6,7 +6,16 @@
 <meta name="color-scheme" content="light dark">
 <meta name="referrer" content="no-referrer">
 <title>PeoAI 人类操作台</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d84ff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='8.5' r='3.1'/%3E%3Cpath d='M4.8 19.4c.6-3.2 3.2-5.1 6.3-5.1 2 0 3.7.7 4.9 2'/%3E%3Cpath d='M18.6 4.2l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z'/%3E%3C/svg%3E">
+<link id="faviconLink" rel="icon">
+<script>
+(function () {
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0d84ff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8.5" r="3.1"/><path d="M4.8 19.4c.6-3.2 3.2-5.1 6.3-5.1 2 0 3.7.7 4.9 2"/><path d="M18.6 4.2l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>';
+  try {
+    var link = document.getElementById('faviconLink');
+    link.href = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  } catch (e) { /* 某些 CSP 下不允许 blob，忽略即可 */ }
+})();
+</script>
 <style>
 /* ============================================================
    PeoAI Console · Miuix 风格
@@ -2233,9 +2242,26 @@ table.data tr:last-child td { border-bottom: none; }
     return !!security.allow_remote_images;
   }
 
+  function dataUrlToBlobUrl(src) {
+    if (!src || src.indexOf('data:') !== 0) return src;
+    try {
+      var comma = src.indexOf(',');
+      if (comma < 0) return src;
+      var header = src.slice(5, comma);
+      var payload = src.slice(comma + 1);
+      var mime = header.split(';')[0] || 'application/octet-stream';
+      var binary = header.indexOf(';base64') >= 0 ? atob(payload) : decodeURIComponent(payload);
+      var bytes = new Uint8Array(binary.length);
+      for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return URL.createObjectURL(new Blob([bytes], { type: mime }));
+    } catch (e) {
+      return src;
+    }
+  }
+
   function mediaImage(src, media) {
     var img = el('img', {
-      src: src,
+      src: dataUrlToBlobUrl(src),
       alt: media.name || '请求中的图片',
       loading: 'lazy',
       referrerpolicy: 'no-referrer',
@@ -2310,7 +2336,7 @@ table.data tr:last-child td { border-bottom: none; }
     var img = document.getElementById('lightboxImg');
     var meta = document.getElementById('lightboxMeta');
     if (!overlay || !img) return;
-    img.src = src;
+    img.src = dataUrlToBlobUrl(src);
     img.alt = (media && media.name) || '';
     meta.textContent = [
       media && media.mime ? media.mime : '',
