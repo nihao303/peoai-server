@@ -659,7 +659,21 @@
     img.addEventListener('error', function () {
       img.style.display = 'none';
       var parent = img.parentNode;
-      if (parent) parent.appendChild(el('div', { class: 'media-error', text: '图片加载失败' }));
+      if (!parent) return;
+      var box = el('div', { class: 'media-error' }, [
+        el('div', { text: '图片加载失败' })
+      ]);
+      if (media.kind === 'remote') {
+        box.appendChild(el('a', {
+          href: src,
+          target: '_blank',
+          rel: 'noopener noreferrer nofollow',
+          text: '在新窗口打开原图'
+        }));
+      } else {
+        box.appendChild(el('div', { class: 'hint', text: '内联图片可能已损坏，可让客户端重新发送。' }));
+      }
+      parent.appendChild(box);
     });
     return img;
   }
@@ -696,7 +710,7 @@
     if (!src) {
       fig.appendChild(el('div', {
         class: 'media-error',
-        text: media.sha256 ? '图片未持久化：历史请求仅保留摘要' : '图片数据缺失'
+        text: media.sha256 ? '图片未持久化：历史请求未保留原图（可在设置开启「持久化图片数据」后重新请求）' : '图片数据缺失'
       }));
       return fig;
     }
