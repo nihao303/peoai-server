@@ -26,7 +26,7 @@
 
 1. 由现有维护者提名，附上贡献记录（合并的 PR、Issue 分类、文档、社区支持等）；
 2. 在 Issue 中公示 7 天，现有维护者无反对即可通过；
-3. 通过后：加入 [MAINTAINERS.md](MAINTAINERS.md)、CODEOWNERS；个人仓库通过 Settings → Collaborators 授予 **Maintain** 权限，组织仓库则加入维护者 Team；
+3. 通过后：加入 [MAINTAINERS.md](MAINTAINERS.md)、CODEOWNERS；个人仓库通过 Settings → Collaborators 授予 **Write**（个人仓库没有 Maintain 角色），组织仓库则加入维护者 Team 并授予 **Maintain**；
 4. 新维护者先从 review 和 issue 分类开始，熟悉发布流程后再独立合并。
 
 ### 退出 / 移除

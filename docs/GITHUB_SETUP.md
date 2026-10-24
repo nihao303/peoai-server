@@ -149,7 +149,7 @@ Settings → Branches → Add branch protection rule
 | 共同维护者 | Maintain | 长期合并 PR、发布、处理安全报告 |
 | 评审者 | Write | 审阅 PR、分类 Issue，不能直接推 `main` |
 
-操作：Settings → Collaborators and teams → Add people。**个人账号（如 nihao303）不能创建 Team**，只能逐个邀请协作者；给共同维护者 **Maintain**、评审者 **Write**。如果以后把仓库迁移到 GitHub Organization，再建 Team `peoai-maintainers`，把成员加进 Team 并授予 Maintain，之后加人只改 Team。
+操作：Settings → Collaborators and teams → Add people。**个人账号（如 nihao303）既不能创建 Team，也没有 Maintain 角色**，只有 Read / Write / Admin：共同维护者给 **Write**，评审者给 **Read**（或 Write）。如果以后把仓库迁移到 GitHub Organization，再建 Team `peoai-maintainers`，把成员加进 Team 并授予 **Maintain**，之后加人只改 Team。
 
 ### CODEOWNERS
 
