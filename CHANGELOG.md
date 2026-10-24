@@ -9,6 +9,7 @@
 - 依赖更新：Flask >=3.1.3、Waitress >=3.0.2、ruff >=0.17.1；requests 按 Python 版本约束（3.9 使用 <2.34，3.10+ 使用 >=2.34.2）；移除未使用的 flask-cors；
 - CI：Python 3.9 固定 ubuntu-22.04，新增 3.13；Actions 升级到 checkout@v7 / setup-python@v7。
 - 远端图片改为按需加载（「加载图片」按钮），避免自动请求泄漏操作员 IP；新增 `queue.persist_media` 设置，可选保留历史图片；
+- 修复严格 CSP（`img-src blob: https:`）下 `data:` 图片与页面图标被拦截：图标与内联图片统一转为 `blob:` URL；
 - 移除 Issue / PR 模板，贡献者直接描述问题与改动。
 
 ## [1.0.0] - 2025-01-01
