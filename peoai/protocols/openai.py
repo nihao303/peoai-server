@@ -579,26 +579,49 @@ def responses_stream(job: Job) -> Iterator[str]:
 
 
 def models_payload(models: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """OpenAI /v1/models 列表，附带 x_peoai 能力扩展字段。"""
+    """OpenAI /v1/models 列表，附带标准容量字段与 x_peoai 扩展。
+
+    除了 x_peoai 扩展，顶层也给出 context_window / max_output_tokens /
+    capabilities / input_modalities，方便只读取标准字段的 Agent 客户端
+    （例如 DSH）直接拿到模型能力，而不是退回默认值。
+    """
     created = 1700000000
     data = []
     for model in models:
-        data.append(
-            {
-                "id": model["id"],
-                "object": "model",
-                "created": created,
-                "owned_by": "peoai",
-                "permission": [],
-                "root": model["id"],
-                "parent": None,
-                "x_peoai": {
-                    "label": model.get("label"),
-                    "description": model.get("description"),
-                    "capabilities": model.get("capabilities"),
-                    "context_window": model.get("context_window"),
-                    "max_output_tokens": model.get("max_output_tokens"),
-                },
-            }
-        )
+        caps = model.get("capabilities") or {}
+        context_window = model.get("context_window")
+        max_output_tokens = model.get("max_output_tokens")
+        input_modalities = ["text"]
+        if caps.get("vision"):
+            input_modalities.append("image")
+        item = {
+            "id": model["id"],
+            "object": "model",
+            "created": created,
+            "owned_by": "peoai",
+            "permission": [],
+            "root": model["id"],
+            "parent": None,
+            "label": model.get("label"),
+            "description": model.get("description"),
+            "capabilities": caps,
+            "context_window": context_window,
+            "context_length": context_window,
+            "contextWindow": context_window,
+            "max_output_tokens": max_output_tokens,
+            "max_tokens": max_output_tokens,
+            "maxOutputTokens": max_output_tokens,
+            "maxTokens": max_output_tokens,
+            "input_modalities": input_modalities,
+            "inputModalities": input_modalities,
+            "x_peoai": {
+                "label": model.get("label"),
+                "description": model.get("description"),
+                "capabilities": caps,
+                "context_window": context_window,
+                "max_output_tokens": max_output_tokens,
+                "input_modalities": input_modalities,
+            },
+        }
+        data.append(item)
     return {"object": "list", "data": data}

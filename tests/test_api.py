@@ -209,7 +209,27 @@ class TestBasics(LiveServer):
         self.assertEqual(data["object"], "list")
         ids = [item["id"] for item in data["data"]]
         self.assertIn("peo-human-1", ids)
-        self.assertTrue(data["data"][0]["x_peoai"]["capabilities"]["vision"])
+        first = data["data"][0]
+        self.assertTrue(first["x_peoai"]["capabilities"]["vision"])
+        # 标准字段：Agent 客户端（DSH 等）直接读取，不依赖 x_peoai
+        self.assertEqual(first["context_window"], 128000)
+        self.assertEqual(first["context_length"], 128000)
+        self.assertEqual(first["max_output_tokens"], 8192)
+        self.assertEqual(first["max_tokens"], 8192)
+        self.assertIn("image", first["input_modalities"])
+        self.assertTrue(first["capabilities"]["vision"])
+
+    def test_models_capabilities_are_per_model(self):
+        resp = requests.get(self.base + "/v1/models", headers=self.key_headers, timeout=5)
+        items = {item["id"]: item for item in resp.json()["data"]}
+        fast = items["peo-human-fast"]
+        self.assertFalse(fast["capabilities"]["vision"])
+        self.assertEqual(fast["input_modalities"], ["text"])
+        self.assertEqual(fast["context_window"], 32000)
+        self.assertEqual(fast["max_output_tokens"], 2048)
+        vision = items["peo-human-vision"]
+        self.assertTrue(vision["capabilities"]["vision"])
+        self.assertEqual(vision["input_modalities"], ["text", "image"])
 
     def test_invalid_key(self):
         resp = requests.get(

@@ -280,6 +280,9 @@ def gemini_models():
     data = []
     for model in _ctx().config.models():
         caps = model.get("capabilities") or {}
+        input_modalities = ["text"]
+        if caps.get("vision"):
+            input_modalities.append("image")
         data.append(
             {
                 "name": "models/" + model["id"],
@@ -287,6 +290,10 @@ def gemini_models():
                 "description": model.get("description") or "",
                 "inputTokenLimit": model.get("context_window"),
                 "outputTokenLimit": model.get("max_output_tokens"),
+                "contextWindow": model.get("context_window"),
+                "maxOutputTokens": model.get("max_output_tokens"),
+                "capabilities": caps,
+                "inputModalities": input_modalities,
                 "supportedGenerationMethods": ["generateContent", "streamGenerateContent"]
                 if caps.get("streaming")
                 else ["generateContent"],

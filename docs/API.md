@@ -188,15 +188,29 @@ GET /v1/models/peo-human-1
     "object": "model",
     "created": 1700000000,
     "owned_by": "peoai",
+    "label": "PeoAI Human 1",
+    "capabilities": {"vision": true, "tools": true, "streaming": true, "reasoning": true, "json_mode": true, "code": true},
+    "context_window": 128000,
+    "context_length": 128000,
+    "contextWindow": 128000,
+    "max_output_tokens": 8192,
+    "max_tokens": 8192,
+    "maxOutputTokens": 8192,
+    "maxTokens": 8192,
+    "input_modalities": ["text", "image"],
+    "inputModalities": ["text", "image"],
     "x_peoai": {
       "label": "PeoAI Human 1",
       "capabilities": {"vision": true, "tools": true, "streaming": true, "reasoning": true, "json_mode": true, "code": true},
       "context_window": 128000,
-      "max_output_tokens": 8192
+      "max_output_tokens": 8192,
+      "input_modalities": ["text", "image"]
     }
   }]
 }
 ~~~
+
+顶层同时给出多种常见拼写，是为了兼容只读取标准字段的 Agent 客户端（DSH、OpenCode 等）；`x_peoai` 保留完整扩展。能力字段按模型独立计算：`peo-human-fast` 的 `input_modalities` 只有 `["text"]`，`peo-human-vision` 为 `["text", "image"]`。
 
 ## Anthropic：Messages
 
