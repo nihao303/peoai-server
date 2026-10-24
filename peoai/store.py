@@ -437,6 +437,27 @@ class JobStore:
     ) -> Job:
         if not messages:
             raise bad_request("messages 不能为空")
+        job = Job(
+            id=new_id("req_"),
+            protocol=protocol,
+            model=model,
+            request_model=request_model or model,
+            stream=bool(stream),
+            created_at=now(),
+            messages=messages,
+            tools=tools or [],
+            tool_choice=tool_choice,
+            params=params or {},
+            images=[],
+            api_key=api_key,
+            client_ip=client_ip,
+            user_agent=user_agent,
+            meta=meta or {},
+            raw=raw or {},
+        )
+        # 同一会话的新请求（客户端“插话”/打断）优先：旧请求还在 pending/claimed
+        # 时先取消，避免旧请求一直占着并发槽，导致新请求排队甚至 429。
+        self._supersede_active(job)
         max_pending = int(self.config.get("queue.max_pending", 100))
         max_per_key = int(self.config.get("queue.max_concurrent_per_key", 3))
         with self._lock:
@@ -456,24 +477,7 @@ class JobStore:
         images: List[Dict[str, Any]] = []
         for message in messages:
             images.extend(message.get("images") or [])
-        job = Job(
-            id=new_id("req_"),
-            protocol=protocol,
-            model=model,
-            request_model=request_model or model,
-            stream=bool(stream),
-            created_at=now(),
-            messages=messages,
-            tools=tools or [],
-            tool_choice=tool_choice,
-            params=params or {},
-            images=images,
-            api_key=api_key,
-            client_ip=client_ip,
-            user_agent=user_agent,
-            meta=meta or {},
-            raw=raw or {},
-        )
+        job.images = images
         with self._lock:
             self._jobs[job.id] = job
         self._persist(job, force=True)
@@ -488,6 +492,35 @@ class JobStore:
                 len(images),
             )
         return job
+
+    def _supersede_active(self, job: Job) -> None:
+        """同一会话的新请求到达时，取消仍在等待的旧请求。
+
+        客户端“插话”时通常会先发新请求、再丢弃旧响应；如果旧请求一直
+        停在 pending/claimed，会占住并发槽和队列位置，表现为“当前对话
+        不结束、下个对话不开始”。这里按 conversation_key + API Key 匹配，
+        只取消同会话的旧请求，不影响其他会话。
+        """
+        if not bool(self.config.get("queue.supersede_same_conversation", True)):
+            return
+        key = job.conversation_key()
+        stale: List[str] = []
+        with self._lock:
+            for other in self._jobs.values():
+                if other.id == job.id or other.status not in ACTIVE:
+                    continue
+                if other.api_key != job.api_key:
+                    continue
+                if other.conversation_key() != key:
+                    continue
+                stale.append(other.id)
+        for job_id in stale:
+            try:
+                self.cancel(job_id, reason="同一会话的新请求已到达，旧请求自动取消")
+                if self.log:
+                    self.log.info("同会话新请求打断旧请求 %s（conversation=%s）", job_id, key)
+            except Exception:
+                continue
 
     # -- 状态迁移 --------------------------------------------------------
     def claim(self, job_id: str, actor: str) -> Job:

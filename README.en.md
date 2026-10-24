@@ -296,7 +296,7 @@ Full steps (HTTPS, ports, backups, upgrades, uninstall, troubleshooting): [docs/
 | --- | --- | --- |
 | server | name / port / default_model / allow_fallback_model / console_enabled | identity and default model |
 | security | require_api_key / max_body_bytes / max_images / max_image_bytes / allowed_origins / session_ttl_seconds / allow_remote_images | access control, limits, CORS |
-| queue | max_pending / request_ttl_seconds / max_concurrent_per_key / history_limit / persist_media | queue and history |
+| queue | max_pending / request_ttl_seconds / max_concurrent_per_key / supersede_same_conversation / history_limit / persist_media | queue and history; `supersede_same_conversation` auto-cancels a stale request when the same conversation sends a new one |
 | models | id / label / aliases / capabilities / context_window / max_output_tokens / default_params | model registry |
 | api_keys | name / prefix / hash / rpm / models | keys (digest only) |
 | operator | display_name / show_client_ip | console behavior |

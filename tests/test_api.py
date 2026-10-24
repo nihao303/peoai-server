@@ -493,6 +493,110 @@ class TestOpenAIProtocol(LiveServer):
         self.assertNotEqual(by_id[id1]["conversation_id"], by_id[id3]["conversation_id"])
         self.assertEqual(by_id[id1]["conversation_title"], "会话锚点-A")
 
+    def test_same_conversation_interrupt_cancels_previous(self):
+        """客户端插话：同会话新请求到达时，旧请求应被取消而不是一直占着队列。"""
+        anchor = [{"role": "system", "content": "你是助手"}, {"role": "user", "content": "插话锚点"}]
+        first = {}
+
+        def first_call():
+            first["resp"] = requests.post(
+                self.base + "/v1/chat/completions",
+                headers=self.key_headers,
+                json={
+                    "model": "peo-human-1",
+                    "messages": anchor + [{"role": "user", "content": "case-interrupt-1"}],
+                },
+                timeout=30,
+            )
+
+        worker = threading.Thread(target=first_call, daemon=True)
+        worker.start()
+        old_job = self.wait_pending("case-interrupt-1")
+
+        second = {}
+
+        def second_call():
+            second["resp"] = requests.post(
+                self.base + "/v1/chat/completions",
+                headers=self.key_headers,
+                json={
+                    "model": "peo-human-1",
+                    "messages": anchor + [{"role": "user", "content": "case-interrupt-2"}],
+                },
+                timeout=30,
+            )
+
+        worker2 = threading.Thread(target=second_call, daemon=True)
+        worker2.start()
+        new_job = self.wait_pending("case-interrupt-2")
+        self.assertNotEqual(old_job["id"], new_job["id"])
+
+        # 旧请求应已被自动取消，客户端立即收到错误而不是继续等待
+        worker.join(10)
+        self.assertIn("resp", first)
+        self.assertNotEqual(first["resp"].status_code, 200)
+
+        detail = requests.get(
+            self.base + "/api/queue/" + old_job["id"],
+            headers=self.op_headers,
+            timeout=5,
+        ).json()["job"]
+        self.assertEqual(detail["status"], "cancelled")
+
+        self.reply(new_job["id"], text="插话后的回答")
+        worker2.join(20)
+        self.assertEqual(second["resp"].status_code, 200)
+
+    def test_different_conversation_not_cancelled(self):
+        """不同会话的请求互不影响。"""
+        first = {}
+
+        def call_first():
+            first["resp"] = requests.post(
+                self.base + "/v1/chat/completions",
+                headers=self.key_headers,
+                json={
+                    "model": "peo-human-1",
+                    "messages": [{"role": "user", "content": "case-other-1"}],
+                },
+                timeout=30,
+            )
+
+        worker = threading.Thread(target=call_first, daemon=True)
+        worker.start()
+        job1 = self.wait_pending("case-other-1")
+
+        second = {}
+
+        def call_second():
+            second["resp"] = requests.post(
+                self.base + "/v1/chat/completions",
+                headers=self.key_headers,
+                json={
+                    "model": "peo-human-1",
+                    "messages": [{"role": "user", "content": "case-other-2"}],
+                },
+                timeout=30,
+            )
+
+        worker2 = threading.Thread(target=call_second, daemon=True)
+        worker2.start()
+        job2 = self.wait_pending("case-other-2")
+
+        detail = requests.get(
+            self.base + "/api/queue/" + job1["id"],
+            headers=self.op_headers,
+            timeout=5,
+        ).json()["job"]
+        self.assertIn(detail["status"], ("pending", "claimed"))
+
+        self.reply(job1["id"], text="会话一回答")
+        self.reply(job2["id"], text="会话二回答")
+        worker.join(20)
+        worker2.join(20)
+        self.assertEqual(first["resp"].status_code, 200)
+        self.assertEqual(second["resp"].status_code, 200)
+
     def test_reasoning_roundtrip(self):
         marker = "case-reasoning"
         holder = {}

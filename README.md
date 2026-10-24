@@ -280,7 +280,7 @@ sudo nginx -t && sudo systemctl reload nginx
 | --- | --- | --- |
 | server | name / port / default_model / allow_fallback_model / console_enabled | 服务身份与默认模型 |
 | security | require_api_key / max_body_bytes / max_images / max_image_bytes / allowed_origins / session_ttl_seconds / allow_remote_images | 准入、限额、CORS |
-| queue | max_pending / request_ttl_seconds / max_concurrent_per_key / history_limit / persist_media | 队列与历史 |
+| queue | max_pending / request_ttl_seconds / max_concurrent_per_key / supersede_same_conversation / history_limit / persist_media | 队列与历史；`supersede_same_conversation` 控制同会话插话时是否自动取消旧请求 |
 | models | id / label / aliases / capabilities / context_window / max_output_tokens | 模型注册表 |
 | api_keys | name / prefix / hash / rpm / models | 密钥（仅摘要） |
 | operator | display_name / show_client_ip | 操作台行为 |

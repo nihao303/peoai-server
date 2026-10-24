@@ -10,6 +10,7 @@
 - CI：Python 3.9 固定 ubuntu-22.04，新增 3.13；Actions 升级到 checkout@v7 / setup-python@v7。
 - 远端图片改为按需加载（「加载图片」按钮），避免自动请求泄漏操作员 IP；新增 `queue.persist_media` 设置，可选保留历史图片；
 - 修复严格 CSP（`img-src blob: https:`）下 `data:` 图片与页面图标被拦截：图标与内联图片统一转为 `blob:` URL；
+- 修复客户端「插话」时旧请求一直占用队列、新请求无法开始：同一会话的新请求到达时自动取消旧的 pending/claimed 请求，可用 `queue.supersede_same_conversation` 关闭；
 - 移除 Issue / PR 模板，贡献者直接描述问题与改动。
 
 ## [1.0.0] - 2025-01-01

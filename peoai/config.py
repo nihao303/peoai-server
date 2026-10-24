@@ -162,6 +162,7 @@ def default_config() -> Dict[str, Any]:
                 "keepalive_seconds": 15,
                 "history_limit": 300,
                 "max_concurrent_per_key": 3,
+                "supersede_same_conversation": True,
                 "persist_media": False,
                 "typing_indicator": True,
             },
