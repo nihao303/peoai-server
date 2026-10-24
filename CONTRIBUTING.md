@@ -70,7 +70,7 @@ fix: 修复 SSE 在客户端断开后未退订
 docs: 补充 Nginx SSE 配置说明
 refactor: 拆分 store 的持久化逻辑
 test: 覆盖工具调用参数校验
-chore: 升级 flask-cors
+chore: 升级 waitress
 ~~~
 
 ## 分支与 PR

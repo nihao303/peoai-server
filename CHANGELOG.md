@@ -2,6 +2,13 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### 变更
+
+- 依赖更新：Flask >=3.1.3、Waitress >=3.0.2、ruff >=0.17.1；requests 按 Python 版本约束（3.9 使用 <2.34，3.10+ 使用 >=2.34.2）；移除未使用的 flask-cors；
+- CI：Python 3.9 固定 ubuntu-22.04，新增 3.13；Actions 升级到 checkout@v7 / setup-python@v7。
+
 ## [1.0.0] - 2025-01-01
 
 首个公开版本。
