@@ -5,9 +5,11 @@
 | 范围 | GitHub | 角色 |
 | --- | --- | --- |
 | 项目负责人 / 后端 / 协议 / 安全 | [@nihao303](https://github.com/nihao303) | Maintainer（Admin） |
-| 共同维护者（范围可按需分配） | [@xrc111](https://github.com/xrc111) | Maintainer（Maintain） |
+| 共同维护者（范围可按需分配） | [@xrc111](https://github.com/xrc111) | Maintainer（Write） |
 | 前端 / 控制台体验 | 待邀请 | Reviewer |
 | 文档 / 示例 | 待邀请 | Reviewer |
+
+> 个人账号仓库没有 GitHub 的 **Maintain** 角色，只有 Read / Write / Admin。Write 可以推送、合并 PR、管理 Issue；如果需要 Maintain，请把仓库迁移到 GitHub Organization。
 
 ## 荣誉维护者
 
