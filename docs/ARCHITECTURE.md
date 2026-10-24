@@ -72,7 +72,7 @@ SSE 生成器循环：                          ▼
 
 - 目录：data/requests/<job_id>.json，原子写入（临时文件 + os.replace，失败重试 3 次）；
 - 每次创建、认领、提交都会写盘；增量写入每 2 秒节流一次；
-- 默认不持久化图片 base64（queue.persist_media = false），只保留元信息与 sha256；
+- 默认不持久化图片 base64（queue.persist_media = false），只保留元信息与 sha256；开启后保留完整 data URL，重启仍可查看；
 - 启动时按 mtime 载入最近 history_limit 个文件，过期未完成的请求标记 expired；
 - 文件超过上限时删除最旧的，内存索引也做同步裁剪。
 

@@ -133,6 +133,7 @@
 
     var requireKey = security.require_api_key !== false;
     var allowRemote = !!security.allow_remote_images;
+  var persistMedia = !!queueConfig.persist_media;
     var maxPending = numberInput(queueConfig.max_pending || 100, { min: 1, max: 5000 });
     var ttl = numberInput(queueConfig.request_ttl_seconds || 600, { min: 10, max: 86400 });
     var maxImages = numberInput(security.max_images || 4, { min: 1, max: 16 });
@@ -155,7 +156,8 @@
         },
         queue: {
           max_pending: Number(maxPending.value) || 100,
-          request_ttl_seconds: Number(ttl.value) || 600
+          request_ttl_seconds: Number(ttl.value) || 600,
+          persist_media: persistSwitch.checked
         }
       }, save);
     });
@@ -164,6 +166,8 @@
     requireSwitch.checked = requireKey;
     var remoteSwitch = el('input', { type: 'checkbox' });
     remoteSwitch.checked = allowRemote;
+    var persistSwitch = el('input', { type: 'checkbox' });
+    persistSwitch.checked = persistMedia;
 
     return card('安全与限额', '默认开启 API Key 校验、请求体限制与单请求图片上限。', [
       el('div', { class: 'form-grid' }, [
@@ -172,8 +176,12 @@
           el('div', { class: 'desc', text: '关闭后任何人无需密钥即可调用，请仅在可信内网使用' })
         ]),
         el('div', { class: 'field' }, [
-          el('label', { class: 'switch' }, [remoteSwitch, el('i'), el('span', { text: '在浏览器加载远端图片' })]),
-          el('div', { class: 'desc', text: '关闭时只显示链接，避免操作员 IP 通过图片请求泄漏' })
+          el('label', { class: 'switch' }, [remoteSwitch, el('i'), el('span', { text: '自动加载远端图片' })]),
+          el('div', { class: 'desc', text: '关闭时显示「加载图片」按钮，点击后才请求图片服务器' })
+        ]),
+        el('div', { class: 'field' }, [
+          el('label', { class: 'switch' }, [persistSwitch, el('i'), el('span', { text: '持久化图片数据' })]),
+          el('div', { class: 'desc', text: '开启后重启服务仍能查看历史图片；会占用更多磁盘' })
         ]),
         fieldRow('待处理队列上限', maxPending, '超过后新请求直接返回 503'),
         fieldRow('请求等待超时（秒）', ttl, '超时后客户端收到 504'),

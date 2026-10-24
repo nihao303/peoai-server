@@ -337,7 +337,9 @@ GET /api/ps
 }
 ~~~
 
-远端图片为 `{"kind": "remote", "url": "https://..."}`，不会在服务端下载。
+远端图片为 `{"kind": "remote", "url": "https://..."}`，不会在服务端下载；前端默认只显示链接和「加载图片」按钮。
+
+历史请求默认不保留 base64（`queue.persist_media = false`），此时 `data_url` 会省略，只保留 `sha256` 与大小；如果希望重启后仍能查看历史图片，在设置页开启「持久化图片数据」，或在 `config.json` 设置 `queue.persist_media = true`。
 
 ## 管理 API
 

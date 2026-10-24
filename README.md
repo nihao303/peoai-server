@@ -219,7 +219,7 @@ PEOAI_HOME=/opt/peoai_server python3 scripts/peoai_admin.py set-password
 - **会话队列**：按会话聚合，一个会话展开后列出它的全部请求；点某一条请求即打开该请求的作答窗口，详情页顶部可在会话内切换请求。
 - **筛选**：待处理 / 进行中 / 已完成，按模型、内容、请求 ID 搜索，实时通过 SSE 更新。
 - **对话**：按角色渲染消息，保留 Markdown 代码块、行内代码与链接；不信任任何 HTML。
-- **图片自动展示**：只要模型开启了 vision，请求里的图片会被解码并以网格展示，点击查看大图与尺寸信息；远端图片默认不加载，避免泄漏操作员出口 IP。
+- **图片展示**：vision 模型的图片会解码为网格并支持大图预览；远端图片默认只显示链接和「加载图片」按钮，点击后才请求图片服务器，避免泄漏操作员出口 IP；历史请求是否保留图片数据由 `queue.persist_media` 控制（设置页可开）。
 - **工具解析**：把 OpenAI `function.parameters`、Anthropic `input_schema`、Gemini `functionDeclarations` 统一成参数表，标出必填项、类型、枚举与说明，并给出原始 JSON Schema。
 - **工具调用表单**：按 Schema 生成输入控件（枚举下拉、开关、数字、JSON 文本域 + 校验），填完加入回复，服务端产出标准 `tool_calls`。
 - **思考消息**：作答区有独立的「思考内容」输入框与「发送思考片段」按钮，思考内容按协议写成 `reasoning_content` / `thinking` / `thought` / `thinking` 字段，不会混进正文。

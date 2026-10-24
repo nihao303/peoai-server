@@ -114,7 +114,7 @@ git ls-files | grep -E 'config\.json|data/|\.log$' || echo "干净"
 | Description | 第 2 节的 About 文案 | 影响搜索与卡片展示 |
 | Website | 演示地址（可选） | 没有就留空 |
 | Topics | 第 3 节 | 提升可发现性 |
-| Features → Issues | 开启 | 配合 `.github/ISSUE_TEMPLATE` |
+| Features → Issues | 开启 | 用于缺陷与功能讨论（不提供模板，开发者自行描述） |
 | Features → Discussions | 视情况开启 | 用于问答与想法 |
 | Features → Wiki | 关闭 | 文档放仓库里更易维护 |
 | Features → Sponsorships | 可选 | 需要先开通 GitHub Sponsors |

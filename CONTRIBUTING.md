@@ -119,7 +119,7 @@ chore: 升级 waitress
 
 ## 报告问题
 
-- 功能与缺陷：使用 Issue 模板；
+- 功能与缺陷：直接开 Issue 描述现象、复现步骤与环境即可（不强制模板）；
 - 安全漏洞：见 [SECURITY.md](SECURITY.md)，不要开公开 Issue；
 - 大改动请先开 Issue 对齐设计，避免白做。
 

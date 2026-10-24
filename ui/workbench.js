@@ -647,27 +647,7 @@
     return !!security.allow_remote_images;
   }
 
-  function renderMedia(media) {
-    var fig = el('figure', { class: 'media' });
-    var isRemote = media.kind === 'remote';
-    var src = isRemote ? media.url : media.data_url;
-
-    if (isRemote && !remoteImagesAllowed()) {
-      fig.classList.add('is-remote');
-      fig.appendChild(el('div', { class: 'media-link' }, [
-        el('a', { href: src, target: '_blank', rel: 'noopener noreferrer nofollow', text: media.name || src })
-      ]));
-      fig.appendChild(el('div', { class: 'hint', text: '远端图片默认不在浏览器加载，避免泄漏操作员 IP。可在设置中开启显示。' }));
-      return fig;
-    }
-    if (!src) {
-      fig.appendChild(el('div', {
-        class: 'media-error',
-        text: media.sha256 ? '图片未持久化：历史请求仅保留摘要' : '图片数据缺失'
-      }));
-      return fig;
-    }
-
+  function mediaImage(src, media) {
     var img = el('img', {
       src: src,
       alt: media.name || '请求中的图片',
@@ -678,13 +658,50 @@
     img.addEventListener('click', function () { openLightbox(src, media); });
     img.addEventListener('error', function () {
       img.style.display = 'none';
-      fig.appendChild(el('div', { class: 'media-error', text: '图片加载失败' }));
+      var parent = img.parentNode;
+      if (parent) parent.appendChild(el('div', { class: 'media-error', text: '图片加载失败' }));
     });
-    fig.appendChild(img);
+    return img;
+  }
+
+  function mountMediaImage(fig, src, media) {
+    clear(fig);
+    fig.classList.remove('is-remote');
+    fig.appendChild(mediaImage(src, media));
     fig.appendChild(el('figcaption', {}, [
-      el('span', { text: (media.mime || (isRemote ? '远端图片' : '图片')) }),
+      el('span', { text: (media.mime || '图片') }),
       el('span', { text: media.bytes ? fmtBytes(media.bytes) : '—' })
     ]));
+  }
+
+  function renderMedia(media) {
+    var fig = el('figure', { class: 'media' });
+    var isRemote = media.kind === 'remote';
+    var src = isRemote ? media.url : media.data_url;
+
+    if (isRemote && !remoteImagesAllowed()) {
+      fig.classList.add('is-remote');
+      var load = el('button', { class: 'btn ghost small media-load', type: 'button' }, [icon('image', 14), '加载图片']);
+      load.addEventListener('click', function () {
+        load.disabled = true;
+        mountMediaImage(fig, src, media);
+      });
+      fig.appendChild(el('div', { class: 'media-link' }, [
+        el('a', { href: src, target: '_blank', rel: 'noopener noreferrer nofollow', text: media.name || src })
+      ]));
+      fig.appendChild(el('div', { class: 'media-actions' }, [load]));
+      fig.appendChild(el('div', { class: 'hint', text: '远端图片默认不自动加载，点击「加载图片」后才会请求图片服务器。' }));
+      return fig;
+    }
+    if (!src) {
+      fig.appendChild(el('div', {
+        class: 'media-error',
+        text: media.sha256 ? '图片未持久化：历史请求仅保留摘要' : '图片数据缺失'
+      }));
+      return fig;
+    }
+
+    mountMediaImage(fig, src, media);
     return fig;
   }
 
