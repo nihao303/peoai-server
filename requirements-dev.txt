@@ -2,4 +2,4 @@
 -r requirements.txt
 requests>=2.31,<2.34; python_version < "3.10"
 requests>=2.34.2; python_version >= "3.10"
-ruff>=0.17.1
+ruff>=0.17.3
