@@ -6,22 +6,6 @@
 | --- | --- |
 | 1.x | 支持 |
 
-## 报告漏洞
-
-**请不要通过公开 Issue 报告安全问题。**
-
-- 邮件：`hhhhhh1234560@163.com`（建议同时开启 GitHub 仓库的 Private vulnerability reporting，优先走私密报告）
-- 或在 GitHub 仓库的 **Security → Report a vulnerability** 中私密提交（需在 Settings 中开启 Private vulnerability reporting）
-
-请尽量包含：
-
-1. 受影响版本与部署方式；
-2. 复现步骤或最小 PoC；
-3. 影响评估（读取数据 / 接管操作台 / 拒绝服务）；
-4. 你希望的署名方式。
-
-我们会在 **72 小时内**确认收到，并在修复发布后致谢（除非你希望匿名）。
-
 ## 安全响应团队
 
 - 当前安全响应维护者：[@nihao303](https://github.com/nihao303)、[@xrc111](https://github.com/xrc111)（分工见 [MAINTAINERS.md](MAINTAINERS.md)）；
