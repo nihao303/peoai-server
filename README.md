@@ -322,13 +322,6 @@ peoai-server/
 
 本项目以 **MIT License** 开源（见 [LICENSE](LICENSE)）。选择理由与备选方案对比、仓库 About 文案、Topics、分支保护、发布流程，都整理在 [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)。
 
-开仓库时的最小清单：
-
-- **About**：`Human-in-the-loop AI API bridge — serve a real human behind OpenAI, Anthropic, Gemini and Ollama compatible endpoints.`（中文版见 GITHUB_SETUP）
-- **Topics**：`openai-api`、`anthropic`、`gemini`、`ollama`、`human-in-the-loop`、`llm`、`flask`、`self-hosted`、`human-as-a-service`、`bridge`
-- **License**：MIT（若你打算阻止他人闭源商用，改用 AGPL-3.0；迁移步骤见文档）
-- **不要提交**：`config.json`、`data/`、任何日志与密钥（已在 `.gitignore` 中忽略）
-
 ## 常见问题
 
 **Q：客户端一直挂起？**  
